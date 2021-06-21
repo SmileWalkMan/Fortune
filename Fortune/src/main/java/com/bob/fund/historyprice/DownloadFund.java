@@ -5,7 +5,9 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.apache.commons.io.IOUtils;
 
@@ -18,7 +20,10 @@ public class DownloadFund {
 
 	public static String downloadOneFund(String fund) {
 
-		String url = "http://fund.eastmoney.com/pingzhongdata/" + fund + ".js?v=20210514115823";
+		Date date = new Date();
+        SimpleDateFormat formatYYYY = new SimpleDateFormat("YYYYMMdd");
+        String currentDate = formatYYYY.format(date);
+		String url = "http://fund.eastmoney.com/pingzhongdata/" + fund + ".js?v="+currentDate+"115823";
 		System.out.println(url);
 		try {
 			InputStream is = DownloadFromURL.downLoadFromUrlAsInputstream(url);
@@ -58,9 +63,13 @@ public class DownloadFund {
 
 	public static void main(String[] args) throws InterruptedException {
 		// TODO Auto-generated method stub
-		for (String s : getfundlist()) {
-			Thread.sleep(100);
+		ArrayList<String> funds=getfundlist();
+		int i =1;
+		for (String s : funds) {
+//			Thread.sleep(100);
+			System.out.println(i+"/"+funds.size());
 			downloadOneFund(s);
+			i++;
 		}
 //		getfundlist();
 	}
